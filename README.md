@@ -1,4 +1,4 @@
-# 🍕 Swiggy Clone - Food Delivery Web Application
+# 🍕 FoodCart - Food Delivery Web Application
 
 A complete, production-ready food delivery web application built entirely with **Python and Django**. This is a full-stack implementation inspired by Swiggy, featuring user authentication, restaurant management, menu ordering, and order tracking.
 
@@ -67,12 +67,12 @@ A complete, production-ready food delivery web application built entirely with *
 ## 📁 Project Structure
 
 ```
-swiggy-clone/
+foodcart/
 ├── manage.py                          # Django management script
 ├── requirements.txt                   # Python dependencies
 ├── db.sqlite3                        # SQLite database (auto-created)
 │
-├── swiggy_clone/                     # Main project folder
+├── foodcart/                     # Main project folder
 │   ├── __init__.py
 │   ├── settings.py                   # Django configuration
 │   ├── urls.py                       # Main URL routing
@@ -151,7 +151,7 @@ swiggy-clone/
 
 ### Step 1: Clone or Download Project
 ```bash
-cd d:\Projects\swiggy-clone
+cd d:\Projects\foodcart
 ```
 
 ### Step 2: Create Virtual Environment
@@ -281,7 +281,7 @@ Edit `/static/css/style.css`:
 ```
 
 ### Configure Email
-Edit `swiggy_clone/settings.py`:
+Edit `foodcart/settings.py`:
 ```python
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -291,20 +291,6 @@ EMAIL_HOST_USER = 'your-email@gmail.com'
 EMAIL_HOST_PASSWORD = 'your-password'
 ```
 
-### Use PostgreSQL (Instead of SQLite)
-Edit `swiggy_clone/settings.py`:
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'swiggy_clone',
-        'USER': 'postgres',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-```
 
 ## 🔒 Security Features
 

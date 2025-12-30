@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Restaurants - FoodCart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Find Restaurants</h2>
+
+    <!-- Search and Filter -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-8">
+                    <input type="text" name="search" class="form-control" placeholder="Search restaurants..." value="{{ search_query }}">
+                </div>
+                <div class="col-md-3">
+                    <select name="city" class="form-select">
+                        <option value="">All Cities</option>
+                        {% for city in cities %}
+                            <option value="{{ city }}" {% if city == city_filter %}selected{% endif %}>{{ city }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-danger w-100">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Restaurants Grid -->
+    {% if restaurants %}
+        <div class="row g-4">
+            {% for restaurant in restaurants %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 restaurant-card shadow-sm">
+                        {% if restaurant.image %}
+                            <img src="{{ restaurant.image.url }}" class="card-img-top" alt="{{ restaurant.name }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <span class="text-muted">No Image</span>
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ restaurant.name }}</h5>
+                            <p class="card-text text-muted small">{{ restaurant.address }}</p>
+                            <p class="card-text text-muted small">📍 {{ restaurant.city }}</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-success">★ {{ restaurant.rating|default:"4.5" }}</span>
+                                {% if restaurant.is_open %}
+                                    <span class="badge bg-info">Open</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Closed</span>
+                                {% endif %}
+                            </div>
+                            
+                            <p class="small text-muted">
+                                🕐 {{ restaurant.opening_time|time:"H:i" }} - {{ restaurant.closing_time|time:"H:i" }}
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'restaurant_detail' restaurant.id %}" class="btn btn-danger w-100">View Menu</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if restaurants.has_other_pages %}
+            <nav class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if restaurants.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ restaurants.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <span class="page-link">{{ restaurants.number }}</span>
+                    </li>
+
+                    {% if restaurants.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ restaurants.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ restaurants.paginator.num_pages }}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info text-center py-5">
+            <h5>No restaurants found</h5>
+            <p class="text-muted">Try adjusting your search or filters.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

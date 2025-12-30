@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Order History - FoodCart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Your Orders</h2>
+
+    {% if orders %}
+        <div class="row">
+            {% for order in orders %}
+                <div class="col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h6 class="card-title">{{ order.restaurant.name }}</h6>
+                                <span class="badge bg-info">{{ order.get_status_display }}</span>
+                            </div>
+                            
+                            <p class="card-text text-muted small">
+                                Order #{{ order.order_number }}<br>
+                                {{ order.created_at|date:"M d, Y H:i" }}
+                            </p>
+
+                            <div class="mb-3">
+                                <strong>₹{{ order.total_amount }}</strong>
+                                <span class="text-muted small">{{ order.items.count }} items</span>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'order_detail' order.id %}" class="btn btn-danger btn-sm">View Details</a>
+                                {% if order.status == 'delivered' and not order.review %}
+                                    <a href="{% url 'review_order' order.id %}" class="btn btn-warning btn-sm">Write Review</a>
+                                {% endif %}
+                                {% if order.status == 'delivered' or order.status == 'cancelled' %}
+                                    <form action="{% url 'delete_order' order.id %}" method="POST" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-outline-danger btn-sm w-100" onclick="return confirm('Are you sure you want to remove this order from history?')">Remove Order</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center py-5">
+            <h5>No orders yet</h5>
+            <p class="text-muted">Start ordering from your favorite restaurants</p>
+            <a href="{% url 'restaurants' %}" class="btn btn-danger btn-lg mt-3">Browse Restaurants</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

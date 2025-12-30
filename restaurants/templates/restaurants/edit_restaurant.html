@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Restaurant - FoodCart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h2 class="mb-4">Edit Restaurant Information</h2>
+                    
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="id_name" class="form-label">Restaurant Name</label>
+                            {{ form.name }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_description" class="form-label">Description</label>
+                            {{ form.description }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_image" class="form-label">Restaurant Image</label>
+                            {% if restaurant.image %}
+                                <div class="mb-2">
+                                    <img src="{{ restaurant.image.url }}" alt="Restaurant" style="max-width: 200px;">
+                                </div>
+                            {% endif %}
+                            {{ form.image }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_address" class="form-label">Address</label>
+                            {{ form.address }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_city" class="form-label">City</label>
+                                {{ form.city }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_phone" class="form-label">Phone Number</label>
+                                {{ form.phone }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label">Email</label>
+                            {{ form.email }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_opening_time" class="form-label">Opening Time</label>
+                                {{ form.opening_time }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_closing_time" class="form-label">Closing Time</label>
+                                {{ form.closing_time }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                {{ form.is_open }}
+                                <label class="form-check-label" for="id_is_open">
+                                    Restaurant is Open
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger btn-lg w-100 mb-2">Update Restaurant</button>
+                        <a href="{% url 'restaurant_dashboard' %}" class="btn btn-secondary btn-lg w-100">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    input, textarea, select {
+        border: 1px solid #ddd !important;
+        padding: 10px 12px !important;
+        width: 100% !important;
+        border-radius: 5px !important;
+        margin-top: 5px !important;
+    }
+</style>
+{% endblock %}

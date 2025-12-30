@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout - FoodCart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-5">
+                    <h2 class="mb-4">Checkout</h2>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <h5 class="mb-3 border-bottom pb-2">Delivery Address</h5>
+                        <div class="mb-4">
+                            <label for="id_delivery_address" class="form-label">Delivery Address</label>
+                            {{ form.delivery_address }}
+                        </div>
+
+                        <h5 class="mb-3 border-bottom pb-2">Payment Method</h5>
+                        <div class="mb-4">
+                            <label for="id_payment_method" class="form-label">Choose Payment Method</label>
+                            {{ form.payment_method }}
+                        </div>
+
+                        <button type="submit" class="btn btn-danger btn-lg w-100">Place Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="mb-3">{{ cart.restaurant.name }}</h6>
+                    
+                    <div class="mb-3" style="max-height: 300px; overflow-y: auto;">
+                        {% for item in cart.items.all %}
+                            <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
+                                <span>{{ item.menu_item.name }} x{{ item.quantity }}</span>
+                                <span>₹{{ item.get_item_total }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <hr>
+
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between">
+                            <span>Subtotal</span>
+                            <span>₹{{ cart.get_total_price }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between">
+                            <span>Delivery Fee</span>
+                            <span>₹{{ delivery_fee }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>Discount</span>
+                            <span>₹0</span>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>Total Amount</strong>
+                            <strong>₹{{ cart.get_total_price|add:delivery_fee }}</strong>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info small">
+                        <strong>Note:</strong> This is a payment simulation. Orders will be marked as pending.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    textarea {
+        border: 1px solid #ddd !important;
+        padding: 10px 12px !important;
+        width: 100% !important;
+        border-radius: 5px !important;
+        margin-top: 5px !important;
+    }
+    select {
+        border: 1px solid #ddd !important;
+        padding: 10px 12px !important;
+        width: 100% !important;
+        border-radius: 5px !important;
+        margin-top: 5px !important;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ restaurant.name }} - FoodCart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Restaurant Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="position-relative">
+                    {% if restaurant.image %}
+                        <img src="{{ restaurant.image.url }}" class="card-img-top" alt="{{ restaurant.name }}" style="height: 300px; object-fit: cover;">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
+                            <span class="text-muted">No Image</span>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h2 class="card-title">{{ restaurant.name }}</h2>
+                    <p class="text-muted">{{ restaurant.description }}</p>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Rating:</strong>
+                            <span class="badge bg-success">★ {{ restaurant.rating|default:"4.5" }}</span>
+                            ({{ restaurant.review_count }} reviews)
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Status:</strong>
+                            {% if restaurant.is_open %}
+                                <span class="badge bg-success">Open</span>
+                            {% else %}
+                                <span class="badge bg-danger">Closed</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Hours:</strong>
+                            {{ restaurant.opening_time|time:"H:i" }} - {{ restaurant.closing_time|time:"H:i" }}
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>📞 Phone:</strong> {{ restaurant.phone }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>📧 Email:</strong> {{ restaurant.email }}
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <strong>📍 Location:</strong> {{ restaurant.address }}, {{ restaurant.city }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Cart Preview -->
+        <div class="col-md-4">
+            <div class="card shadow-sm position-sticky" style="top: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Your Cart</h5>
+                    <div id="cartPreview" class="mb-3">
+                        <p class="text-muted small">Cart is empty</p>
+                    </div>
+                    <a href="{% url 'cart' %}" class="btn btn-danger w-100">View Cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu -->
+    {% if categories %}
+        {% for category in categories %}
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h3 class="mb-4 border-bottom pb-2">{{ category.name }}</h3>
+                    
+                    {% if category.items.all %}
+                        <div class="row g-3">
+                            {% for item in category.items.all %}
+                                <div class="col-md-6">
+                                    <div class="card menu-item-card">
+                                        <div class="row g-0">
+                                            <div class="col-md-4">
+                                                {% if item.image %}
+                                                    <img src="{{ item.image.url }}" class="img-fluid h-100" alt="{{ item.name }}" style="object-fit: cover;">
+                                                {% else %}
+                                                    <div class="bg-light d-flex align-items-center justify-content-center h-100" style="min-height: 150px;">
+                                                        <span class="text-muted">No Image</span>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    <h6 class="card-title">
+                                                        {{ item.name }}
+                                                        {% if item.is_vegetarian %}
+                                                            <span class="badge bg-success">Veg</span>
+                                                        {% endif %}
+                                                    </h6>
+                                                    <p class="card-text small text-muted">{{ item.description }}</p>
+                                                    <p class="card-text"><strong>₹{{ item.price }}</strong></p>
+                                                    
+                                                    <div class="btn-group btn-group-sm" role="group">
+                                                        {% if item.is_available %}
+                                                            <button class="btn btn-outline-danger add-to-cart-btn" data-item-id="{{ item.id }}" data-item-name="{{ item.name }}">
+                                                                Add to Cart
+                                                            </button>
+                                                        {% else %}
+                                                            <button class="btn btn-secondary" disabled>Out of Stock</button>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No items in this category.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">
+            This restaurant doesn't have any menu items yet.
+        </div>
+    {% endif %}
+
+    <!-- Reviews -->
+    {% if reviews %}
+        <div class="row mb-5">
+            <div class="col-12">
+                <h3 class="mb-4 border-bottom pb-2">Customer Reviews</h3>
+                
+                {% for review in reviews %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="card-title">{{ review.user.get_full_name|default:review.user.username }}</h6>
+                                <span class="badge bg-warning text-dark">★ {{ review.rating }}</span>
+                            </div>
+                            <p class="card-text">{{ review.comment }}</p>
+                            <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const itemId = this.dataset.itemId;
+        const itemName = this.dataset.itemName;
+        
+        fetch('{% url 'add_to_cart' %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                item_id: itemId,
+                quantity: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                document.getElementById('cartPreview').innerHTML = 
+                    `<p><strong>Items:</strong> ${data.cart_count}</p>
+                     <p><strong>Total:</strong> ₹${data.cart_total.toFixed(2)}</p>`;
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+</script>
+
+<style>
+    .menu-item-card {
+        transition: transform 0.2s;
+    }
+    .menu-item-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+</style>
+{% endblock %}

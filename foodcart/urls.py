@@ -1,5 +1,5 @@
 """
-Main URL configuration for swiggy_clone project.
+Main URL configuration for foodcart project.
 Routes all apps to their respective URL patterns.
 """
 

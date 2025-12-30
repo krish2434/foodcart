@@ -42,7 +42,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'swiggy_clone.urls'
+ROOT_URLCONF = 'foodcart.urls'
 
 TEMPLATES = [
     {
@@ -60,7 +60,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'swiggy_clone.wsgi.application'
+WSGI_APPLICATION = 'foodcart.wsgi.application'
 
 # Database
 DATABASES = {

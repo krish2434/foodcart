@@ -1,5 +1,5 @@
 """
-Views for main swiggy_clone project.
+Views for main foodcart project.
 Contains home page and error pages.
 """
 

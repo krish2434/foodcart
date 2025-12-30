@@ -1,6 +1,6 @@
-# 🍕 FoodCart - Food Delivery Web Application
+# 🍕 FoodCart
 
-A complete, production-ready food delivery web application built entirely with **Python and Django**. This is a full-stack implementation featuring user authentication, restaurant management, menu ordering, and order tracking.
+A food delivery web application built with **Python and Django**. Browse restaurants, place orders, and manage deliveries.
 
 ## 📋 Features
 
@@ -268,44 +268,6 @@ The application will be available at: **http://127.0.0.1:8000/**
 - `GET /accounts/address/<id>/edit/` - Edit address form
 - `POST /accounts/address/<id>/delete/` - Delete address
 
-## 🎨 Customization
-
-### Change Brand Colors
-Edit `/static/css/style.css`:
-```css
-:root {
-    --primary-color: #ff5e1f;  /* Change this to your brand color */
-    --dark-color: #1c1c1c;
-    --light-color: #f5f5f5;
-}
-```
-
-### Configure Email
-Edit `swiggy_clone/settings.py`:
-```python
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your-email@gmail.com'
-EMAIL_HOST_PASSWORD = 'your-password'
-```
-
-### Use PostgreSQL (Instead of SQLite)
-Edit `swiggy_clone/settings.py`:
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'foodcart',
-        'USER': 'postgres',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-```
-
 ## 🔒 Security Features
 
 - **CSRF Protection**: Built-in CSRF token validation
@@ -365,65 +327,7 @@ DATABASES = {
 - Ratings and comments
 - Related to order, user, and restaurant
 
-## 🐛 Troubleshooting
-
-### Port Already in Use
-```bash
-python manage.py runserver 8001
-```
-
-### Migration Issues
-```bash
-python manage.py migrate --run-syncdb
-```
-
-### Static Files Not Loading
-```bash
-python manage.py collectstatic
-```
-
-### Database Reset (Development Only)
-```bash
-rm db.sqlite3
-python manage.py migrate
-python manage.py createsuperuser
-```
-
-## 📚 Additional Resources
-
-- [Django Documentation](https://docs.djangoproject.com/)
-- [Django Models](https://docs.djangoproject.com/en/4.2/topics/db/models/)
-- [Django Templates](https://docs.djangoproject.com/en/4.2/topics/templates/)
-- [Django Forms](https://docs.djangoproject.com/en/4.2/topics/forms/)
-- [Bootstrap 5 Documentation](https://getbootstrap.com/docs/5.0/)
-
-## 📝 Code Conventions
-
-- **Models**: Use descriptive names and add docstrings
-- **Views**: Use class-based views where appropriate
-- **Forms**: Create custom forms for validation
-- **Templates**: Keep templates DRY (Don't Repeat Yourself)
-- **CSS**: Use utility classes and custom styles
-- **Comments**: Add comments for complex logic
-
-## 🚀 Deployment
-
-### For Production:
-1. Set `DEBUG = False` in settings.py
-2. Update `ALLOWED_HOSTS` with your domain
-3. Use a production database (PostgreSQL recommended)
-4. Set up proper email backend
-5. Use a production WSGI server (Gunicorn, uWSGI)
-6. Use a reverse proxy (Nginx)
-7. Enable HTTPS with SSL certificate
-
-Example with Gunicorn:
-```bash
-pip install gunicorn
-gunicorn foodcart.wsgi:application --bind 0.0.0.0:8000
-```
-
-## 📄 License
+##  License
 
 This project is open source and available for educational purposes.
 
